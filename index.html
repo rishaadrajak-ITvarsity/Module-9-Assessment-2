@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>World Time</title>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+    </head>
+    <body>
+       <p id="local" >Loading...</p>
+       <div id="output">
+            
+       </div>
+
+       <script>
+           var timer = setInterval(displayWorldTime, 1000);
+
+           var cities = [
+                {name: "Istanbul", utcOffset: 3, flag: "Turkey.png"},
+                {name: "New York City", utcOffset: -5, flag: "United-States-Of-America.png"},
+                {name: "Tokyo", utcOffset: 9, flag: "Japan.png"},
+                {name: "Moscow", utcOffset: 3, flag: "Russia.png"},
+                {name: "Rio De Janeiro", utcOffset: -3, flag: "Brazil.png"},
+                {name: "Sydney", utcOffset: 11, flag: "Australia.png"},
+                {name: "Vancouver", utcOffset: -8, flag: "Canada.png"},
+                {name: "Beijing", utcOffset: 8, flag: "China.png"},
+                
+                {name: "Afghanistan",   utcOffset: 3,   flag: "Afghanistan.png"},
+                {name: "Argentina",     utcOffset: -5,  flag: "Argentina.png"},
+                {name: "Belgium",       utcOffset: 9,   flag: "Belgium.png"},
+                {name: "Brazil",        utcOffset: 3,   flag: "Brazil.png"},
+                {name: "Cape Verde",    utcOffset: -3,  flag: "Cape-Verde.png"},
+                {name: "Egypt",         utcOffset: 11,  flag: "Egypt.png"},
+                {name: "France",        utcOffset: -8,  flag: "France.png"},
+                {name: "India",         utcOffset: 8,   flag: "India.png"},
+                {name: "Italy",         utcOffset: 8,   flag: "Italy.png"},
+                {name: "Morocco",       utcOffset: 8,   flag: "Morocco.png"},
+                {name: "New-Zealand",   utcOffset: 8,   flag: "New-Zealand.png"},
+                {name: "Norway",        utcOffset: 8,   flag: "Norway.png"},
+                {name: "Qatar",         utcOffset: 8,   flag: "Qatar.png"},
+                {name: "Sierra Leone",  utcOffset: 8,   flag: "Sierra-Leone.png"},
+                {name: "Singapore",     utcOffset: 8,   flag: "Singapore.png"},
+                {name: "South Africa",  utcOffset: 8,   flag: "South-Africa.png"},
+                {name: "Turkey",        utcOffset: 8,   flag: "Turkey.png"},
+           ];
+
+            cities.sort(compare);
+            // console.log(cities);
+            // console.log(getCurrentTime(cities[0].utcOffset));
+            
+            function compare(a,b){
+                var cityA = a.name;
+                var cityB = b.name;
+                var comparison = 0;
+                if(cityA > cityB){
+                    comparison = 1;
+                }
+                else if(cityA < cityB){
+                    comparison = -1;
+                }
+                return comparison;
+            }
+
+           function getUtcTime(){
+                var dt = new Date();
+                var utcOffset = dt.getTimezoneOffset() * 60000;
+                var utcTime = new Date(dt.getTime() + utcOffset);
+                return utcTime.getTime();
+           }
+
+           function getCurrentTime(utcOffset){
+               var mil = 1000 * 60 * 60;
+               var time = new Date(getUtcTime() + utcOffset * mil);
+               return time.toLocaleTimeString();
+           }
+
+           function displayWorldTime(){
+               var dt = new Date();
+               document.getElementById("local").innerHTML = "Local time : " + dt.toLocaleTimeString();
+
+               var output = `
+                            <header>
+                                <h1 id="heading">World Clock</h1>
+                                <table>
+                                    <tr class="headRow">
+                                        <th class="col1">Country</th>
+                                        <th class="col2">Locale</th>
+                                        <th class="col3">Time</th>
+                                    </tr>
+                                </table>
+                            </header>
+                            <table id="cities">
+                            `;
+               output += `
+                        <tr>
+                            <th class="col1"></th>
+                            <th class="col2"></th>
+                            <th class="col3"></th>
+                        </tr>
+                        `; 
+
+               for(a = 0; a < cities.length; a++){
+                   output +=`
+                        <tr>
+                            <td><img src="img/${cities[a].flag}"></td>
+                            <td>${cities[a].name}</td>
+                            <td>${getCurrentTime(cities[a].utcOffset)}</td>
+                        </tr>
+                   `;
+               }
+               output += `</table>`
+               document.getElementById("output").innerHTML = output;
+           }
+       </script>
+    </body>
+</html>
